@@ -1,3 +1,4 @@
+
 # Dependencies
 node_modules/
 npm-debug.log
@@ -30,3 +31,4 @@ build/
 # OS specific
 .DS_Store
 Thumbs.db 
+
