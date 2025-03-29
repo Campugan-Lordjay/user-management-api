@@ -46,4 +46,43 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Get all users
+
+router.get("/", async (req, res) => {
+    try {
+        const userRepository = AppDataSource.getRepository(User);
+        const users = await userRepository.find();
+
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching users", error });
+    }
+});
+
+router.get("/:id", async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = Number(req.params.id); // Convert ID to number
+
+        if (isNaN(userId)) {
+            res.status(400).json({ message: "Invalid user ID" });
+            return;
+        }
+
+        const userRepository = AppDataSource.getRepository(User);
+        const user = await userRepository.findOne({
+            where: { id: userId },
+        });
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error fetching user", error });
+    }
+});
+
 export default router;
